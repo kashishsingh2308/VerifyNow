@@ -141,7 +141,7 @@ const Auth: React.FC = () => {
                   <GoogleLogin
                     onSuccess={handleGoogleLoginSuccess}
                     onError={handleGoogleLoginError}
-                    width="100%"
+                    width="300"
                     text="signin_with"
                   />
                 )}

@@ -35,7 +35,11 @@ for key, value in {
 genai.configure(api_key=GEMINI_API_KEY)
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, 
+     supports_credentials=True, 
+     origins=["https://verify-now-ashy.vercel.app"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["*"])
 
 # -------------------------
 # Utility Functions
