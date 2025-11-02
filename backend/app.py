@@ -34,13 +34,24 @@ for key, value in {
 # -------------------------
 genai.configure(api_key=GEMINI_API_KEY)
 
+
+
 app = Flask(__name__)
 CORS(app, 
-     supports_credentials=True, 
-     origins=["https://verify-now-ashy.vercel.app"],
+     supports_credentials=True,
+     origins=["https://verify-now-ashy.vercel.app", "http://localhost:3000", "http://localhost:5173"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-     allow_headers=["*"])
+     allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"])
 
+
+# Add this right after CORS configuration
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'https://verify-now-ashy.vercel.app')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 # -------------------------
 # Utility Functions
 # -------------------------
