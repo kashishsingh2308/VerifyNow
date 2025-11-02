@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* VerifyNow Design System - Glassmorphism Dark Theme */
+
+@layer base {
+  :root {
+    /* Core Brand Colors */
+    --brand-black: 0 0% 8%;
+    --brand-charcoal: 220 13% 18%;
+    --brand-surface: 220 13% 12%;
+    --brand-glass: 220 13% 15%;
+    
+    /* Signal Colors */
+    --signal-verified: 142 76% 36%;
+    --signal-fake: 0 84% 60%;
+    --signal-misleading: 43 96% 56%;
+    --signal-info: 217 91% 60%;
+    
+    /* Text Colors */
+    --text-primary: 0 0% 98%;
+    --text-secondary: 220 14% 71%;
+    --text-muted: 220 14% 46%;
+    
+    /* Glassmorphism */
+    --glass-bg: 220 13% 15% / 0.8;
+    --glass-border: 220 13% 91% / 0.1;
+    --glass-glow: 217 91% 60% / 0.1;
+    
+    /* Animation Values */
+    --gradient-start: 220 13% 8%;
+    --gradient-end: 220 13% 12%;
+    --particle-opacity: 0.03;
+    --glow-intensity: 0.4;
+    
+    /* Standard Theme Mappings */
+    --background: var(--brand-black);
+    --foreground: var(--text-primary);
+    --card: var(--brand-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--brand-surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--text-primary);
+    --primary-foreground: var(--brand-black);
+    --secondary: var(--brand-charcoal);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--brand-charcoal);
+    --muted-foreground: var(--text-muted);
+    --accent: var(--brand-glass);
+    --accent-foreground: var(--text-primary);
+    --destructive: var(--signal-fake);
+    --destructive-foreground: var(--text-primary);
+    --border: hsl(220 13% 91% / 0.1);
+    --input: var(--brand-glass);
+    --ring: var(--signal-info);
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: "cv03", "cv04", "cv11";
+  }
+  
+  /* Keyframes */
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  @keyframes particle-float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(120deg); }
+    66% { transform: translateY(5px) rotate(240deg); }
+    100% { transform: translateY(0px) rotate(360deg); }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px hsl(var(--signal-info) / 0.4); }
+    50% { box-shadow: 0 0 30px hsl(var(--signal-info) / 0.7), 0 0 40px hsl(var(--signal-info) / 0.3); }
+  }
+  
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes scale-in {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes slide-in-right {
+    0% { opacity: 0; transform: translateX(20px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  
+  /* Animated Background */
+  .animated-bg {
+    background: linear-gradient(135deg, 
+      hsl(var(--gradient-start)) 0%, 
+      hsl(var(--gradient-end)) 100%);
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease-in-out infinite;
+  }
+  
+  .floating-particles::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 20%, hsl(var(--signal-info)) var(--particle-opacity) 0px, transparent 1px),
+      radial-gradient(circle at 80% 80%, hsl(var(--signal-verified)) var(--particle-opacity) 0px, transparent 1px),
+      radial-gradient(circle at 60% 40%, hsl(var(--signal-info)) var(--particle-opacity) 0px, transparent 1px);
+    background-size: 100px 100px, 150px 150px, 80px 80px;
+    animation: particle-float 20s linear infinite;
+    pointer-events: none;
+  }
+}
+
+@layer components {
+  /* Glass Surface */
+  .glass-surface {
+    @apply backdrop-blur-xl border;
+    background: hsl(var(--glass-bg));
+    border-color: hsl(var(--glass-border));
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-surface-hover {
+    @apply glass-surface transition-all duration-300;
+  }
+  
+  .glass-surface-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 48px rgba(0, 0, 0, 0.4),
+      0 0 24px hsl(var(--glass-glow)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+  
+  /* Glow Effects */
+  .glow-verified {
+    box-shadow: 0 0 20px hsl(var(--signal-verified) / var(--glow-intensity));
+  }
+  
+  .glow-fake {
+    box-shadow: 0 0 20px hsl(var(--signal-fake) / var(--glow-intensity));
+  }
+  
+  .glow-info {
+    box-shadow: 0 0 20px hsl(var(--signal-info) / var(--glow-intensity));
+  }
+  
+  /* Button Variants */
+  .btn-hero {
+    @apply glass-surface px-8 py-4 text-lg font-semibold rounded-2xl;
+    @apply transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(135deg, 
+      hsl(var(--signal-info)) 0%, 
+      hsl(var(--signal-verified)) 100%);
+  }
+  
+  .btn-hero:hover {
+    @apply glow-info;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  .btn-glass {
+    @apply glass-surface-hover px-6 py-3 font-medium rounded-xl;
+    @apply transition-all duration-200 hover:scale-[1.02] active:scale-[0.98];
+  }
+  
+  /* Verdict Badges */
+  .badge-verified {
+    @apply bg-signal-verified/20 text-signal-verified border-signal-verified/30;
+    @apply backdrop-blur-sm rounded-full px-4 py-2 font-semibold;
+  }
+  
+  .badge-fake {
+    @apply bg-signal-fake/20 text-signal-fake border-signal-fake/30;
+    @apply backdrop-blur-sm rounded-full px-4 py-2 font-semibold;
+  }
+  
+  .badge-misleading {
+    @apply bg-signal-misleading/20 text-signal-misleading border-signal-misleading/30;
+    @apply backdrop-blur-sm rounded-full px-4 py-2 font-semibold;
+  }
+}
