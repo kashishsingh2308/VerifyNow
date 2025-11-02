@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 import google.generativeai as genai
@@ -37,14 +37,31 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 
 app = Flask(__name__)
+
+
+# -------------------------
+# Configure CORS PROPERLY
+# -------------------------
+
+# Configure CORS with specific origins
 CORS(app, 
      supports_credentials=True,
-     origins=["https://verify-now-ashy.vercel.app", "http://localhost:3000", "http://localhost:5173"],
+     origins=["https://verify-now-ashy.vercel.app"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"])
 
+# Handle preflight requests
+@app.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        response = jsonify({"status": "success"})
+        response.headers.add("Access-Control-Allow-Origin", "https://verify-now-ashy.vercel.app")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        return response
 
-# Add this right after CORS configuration
+# Add CORS headers to all responses
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', 'https://verify-now-ashy.vercel.app')
