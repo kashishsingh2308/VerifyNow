@@ -37,7 +37,7 @@ const getInitialAuthState = (): { token: string | null; user: User | null } => {
   }
 };
 
-const BACKEND_VERIFY_URL = 'http://localhost:5000/api/verify-token';
+const BACKEND_VERIFY_URL = `${import.meta.env.VITE_BACKEND_URL}/api/verify-token`;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [authState, setAuthState] = useState(getInitialAuthState);
