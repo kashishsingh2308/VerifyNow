@@ -81,7 +81,17 @@ def call_gemini_working(prompt):
             print(f"Model {model_name} failed: {e}")
             continue
     
-    raise Exception("No working Gemini models found")
+        print("All Gemini models failed. Returning fallback response instead of crashing.")
+
+        # Return JSON-as-text so extract_json() still works
+        fallback = {
+            "verdict": "Unverified",
+            "summary": "Due to temporary Gemini model issues, this statement is marked as Unverified.",
+            "proofs": ["External Gemini models are not available at the moment."],
+            "confidence": 0
+        }
+        return json.dumps(fallback)
+
 
 
 def check_url_safety(url):
